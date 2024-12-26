@@ -1,38 +1,38 @@
-pipeline{
-  agent any
-  environment{
-    PYTHON_PATH=''C:\\Users\\Admin\\AppData\\Local\\Programs\\Python\\Python313;C:\\Users\\Admin\\AppData\\Local\\Programs\\Python\\Python313\\Scripts'
-  }
-  stage{
-    stage('checkout'){
-      steps{
-        checkout scm
-      }
+pipeline {
+    agent any
+    environment {
+        PYTHON_PATH = 'C:\\Users\\Admin\\AppData\\Local\\Programs\\Python\\Python313;C:\\Users\\Admin\\AppData\\Local\\Programs\\Python\\Python313\\Scripts'
     }
-    }
-  stage('build){
-        steps{
-          bat '''
-          set PATH=%PYTHON-PATH%;%PATH%
-          pip install -r requirment.txt
-          '''
+    stages {
+        stage('checkout') {
+            steps {
+                checkout scm
+            }
         }
-  }
-  stage('Sonarqube-Analysis'){
-    environment{
-      SONAR-TOKEN=credentials('sonar-token')
-    }
-    step{
-      bat '''
+        stage('build') {
+            steps {
+                bat '''
+                set PATH=%PYTHON_PATH%;%PATH%
+                pip install -r requirement.txt
+                '''
+            }
+        }
+        stage('Sonarqube-Analysis') {
+            environment {
+                SONAR_TOKEN = credentials('sonar-token')
+            }
+            steps {
+                bat '''
                 set PATH=%PYTHON_PATH%;%PATH%
                 sonar-scanner -Dsonar.projectKey=test110 ^
                   -Dsonar.sources=. ^
                   -Dsonar.host.url=http://localhost:9000 ^
                   -Dsonar.token=%SONAR_TOKEN%
                 '''
+            }
+        }
     }
-  }
-        post {
+    post {
         success {
             echo 'Pipeline completed successfully'
         }
@@ -42,4 +42,5 @@ pipeline{
         always {
             echo 'This runs regardless of the result.'
         }
+    }
 }
