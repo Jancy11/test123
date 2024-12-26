@@ -11,10 +11,10 @@ pipeline {
         }
         stage('build') {
             steps {
-                bat '''
+                bat """
                 set PATH=%PYTHON_PATH%;%PATH%
-                pip install -r requirement.txt
-                '''
+                "C:\\Windows\\System32\\cmd.exe" /c pip install -r requirements.txt
+                """
             }
         }
         stage('Sonarqube-Analysis') {
@@ -22,14 +22,13 @@ pipeline {
                 SONAR_TOKEN = credentials('sonar-token')
             }
             steps {
-                bat '''
+                bat """
                 set PATH=%PYTHON_PATH%;%PATH%
-                sonar-scanner -Dsonar.projectKey=d1 ^
+                "C:\\Windows\\System32\\cmd.exe" /c sonar-scanner -Dsonar.projectKey=test110 ^
                   -Dsonar.sources=. ^
                   -Dsonar.host.url=http://localhost:9000 ^
                   -Dsonar.token=%SONAR_TOKEN%
-                '''
-                
+                """
             }
         }
     }
