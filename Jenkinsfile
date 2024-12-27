@@ -4,16 +4,16 @@ pipeline {
         PYTHON_PATH = 'C:\\Users\\Admin\\AppData\\Local\\Programs\\Python\\Python313;C:\\Users\\Admin\\AppData\\Local\\Programs\\Python\\Python313\\Scripts'
     }
     stages {
-        stage('checkout') {
+        stage('Checkout') {
             steps {
                 checkout scm
             }
         }
-        stage('build') {
+        stage('Build') {
             steps {
                 bat """
                 set PATH=%PYTHON_PATH%;%PATH%
-                "C:\\Windows\\System32\\cmd.exe" /c pip install -r requirements.txt
+                pip install -r requirements.txt
                 """
             }
         }
@@ -24,10 +24,10 @@ pipeline {
             steps {
                 bat """
                 set PATH=%PYTHON_PATH%;%PATH%
-                "C:\\Windows\\System32\\cmd.exe" /c sonar-scanner -Dsonar.projectKey=test110 ^
-                  -Dsonar.sources=. ^
-                  -Dsonar.host.url=http://localhost:9000 ^
-                  -Dsonar.token=%SONAR_TOKEN%
+                sonar-scanner -Dsonar.projectKey=test110 ^
+                               -Dsonar.sources=. ^
+                               -Dsonar.host.url=http://localhost:9000 ^
+                               -Dsonar.login=%SONAR_TOKEN%
                 """
             }
         }
